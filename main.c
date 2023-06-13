@@ -2,14 +2,18 @@
 #include <stdlib.h>
 #include <conio.h> //gotoxy
 #include <string.h>
-#include <windows.h>
+//#include <windows.h>
 #include <time.h>
 #include "function.h"
 
-int main(void)
-{
+void login();
+void list_menu();
+
+time_t t;
+
+int main()
+{	
 	int choice;
-    time_t t;
 	time(&t);
 	printf("                                                                                                         \n");
 	printf(" -------------------------------------------------------------------------------------------------------\n");
@@ -37,9 +41,7 @@ int main(void)
 	printf("|Press any key to continue.........\t\t\t\t\t\t\t\t\t|\n");
 	printf(" -------------------------------------------------------------------------------------------------------\n"); 
     getch(); //hold screen 
-    system("cls");
+	system("cls");
     
-	//menu();
-    login();
-
+	login();
 }

@@ -4,6 +4,7 @@
         "stdio.h": "c",
         "conio.h": "c",
         "windows.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "function.h": "c"
     }
 }
