@@ -3,9 +3,9 @@
 #include <conio.h> //gotoxy
 #include <string.h>
 #include <windows.h>
-//#include <time.h>
+#include <time.h>
 
-void login(){
+void login(void){
     int count = 0, i = 0;
     char user_name[10],c = ' ';
     char user_pass[10],code[10];
@@ -43,5 +43,33 @@ printf(" -----------------------------------------------------------------------
             printf("\n\t\t \033[4mSorry you have entered the wrong username and password for four times!!!\033[0m");
 		    getch();  //holds the screen
         }
-}
+    getch();
+    printf("Hellp world");
 
+    /*time_t t;
+    time(&t);
+    printf(" -------------------------------------------------------------------------------------------------------\n");
+	printf("\t\t\t\t\t%s",ctime(&t));
+	printf(" -------------------------------------------------------------------------------------------------------\n");
+	printf("|\t\t\t\t\t\t\t\t\t\t\t\t\t|\n");
+	printf("|\t\t\t\t\t\t\t\t\t\t\t\t\t|\n");
+	printf("|\t\t\t\t\t\t\t\t\t\t\t\t\t|\n");
+	printf("|\t\t\t\t\t\t\t\t\t\t\t\t\t|\n");
+	printf("|\t\t\t\t\t\t\t\t\t\t\t\t\t|\n");
+	printf("|\t\t\t\t\t\t\t\t\t\t\t\t\t|\n");
+    printf("|\t\t\t\t\t\t\t\t\t\t\t\t\t|\n");
+    printf("|\t\t\t\t\t\t\t\t\t\t\t\t\t|\n");
+	printf("|\t\t\t\t\t\t\t\t\t\t\t\t\t|\n");
+    printf("|\t\t\t\t\t\t\t\t\t\t\t\t\t|\n");
+    printf("|\t\t\t\t\t\t\t\t\t\t\t\t\t|\n");
+    printf("|\t\t\t\t\t\t\t\t\t\t\t\t\t|\n");
+    printf("|\t\t\t\t\t\t\t\t\t\t\t\t\t|\n");
+	printf("|\t\t\t\t\t\t\t\t\t\t\t\t\t|\n");
+	printf("|\t\t\t\t\t\t\t\t\t\t\t\t\t|\n");
+	printf("|\t\t\t\t\t\t\t\t\t\t\t\t\t|\n");
+	printf("|\t\t\t\t\t\t\t\t\t\t\t\t\t|\n");
+	printf("|\t\t\t\t\t\t\t\t\t\t\t\t\t|\n");
+	printf("|Press any key to continue.........\t\t\t\t\t\t\t\t\t|\n");
+	printf(" -------------------------------------------------------------------------------------------------------\n");
+    */
+}

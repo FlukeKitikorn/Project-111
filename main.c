@@ -8,6 +8,7 @@
 
 int main(void)
 {
+	int choice;
     time_t t;
 	time(&t);
 	printf("                                                                                                         \n");
@@ -38,6 +39,7 @@ int main(void)
     getch(); //hold screen 
     system("cls");
     
+	//menu();
     login();
-    system("cls");
+
 }
