@@ -45,31 +45,47 @@ printf(" -----------------------------------------------------------------------
             }
     getch();
     system("cls");
-     void list_menu();
 }
 
-void list_menu(void){
-    printf(" -------------------------------------------------------------------------------------------------------\n");
-	//printf("\t\t\t\t\t%s",ctime(&t));
-	printf(" -------------------------------------------------------------------------------------------------------\n");
-	printf("|\t\t\t\t\t\t\t\t\t\t\t\t\t|\n");
-	printf("|\t\t\t\t\t\t\t\t\t\t\t\t\t|\n");
-	printf("|\t\t\t\t\t\t\t\t\t\t\t\t\t|\n");
-	printf("|\t\t\t\t\t\t\t\t\t\t\t\t\t|\n");
-	printf("|\t\t\t\t\t\t\t\t\t\t\t\t\t|\n");
-	printf("|\t\t\t\t\t\t\t\t\t\t\t\t\t|\n");
-    printf("|\t\t\t\t\t\t\t\t\t\t\t\t\t|\n");
-    printf("|\t\t\t\t\t\t\t\t\t\t\t\t\t|\n");
-	printf("|\t\t\t\t\t\t\t\t\t\t\t\t\t|\n");
-    printf("|\t\t\t\t\t\t\t\t\t\t\t\t\t|\n");
-    printf("|\t\t\t\t\t\t\t\t\t\t\t\t\t|\n");
-    printf("|\t\t\t\t\t\t\t\t\t\t\t\t\t|\n");
-    printf("|\t\t\t\t\t\t\t\t\t\t\t\t\t|\n");
-	printf("|\t\t\t\t\t\t\t\t\t\t\t\t\t|\n");
-	printf("|\t\t\t\t\t\t\t\t\t\t\t\t\t|\n");
-	printf("|\t\t\t\t\t\t\t\t\t\t\t\t\t|\n");
-	printf("|\t\t\t\t\t\t\t\t\t\t\t\t\t|\n");
-	printf("|\t\t\t\t\t\t\t\t\t\t\t\t\t|\n");
-	printf("|Press any key to continue.........\t\t\t\t\t\t\t\t\t|\n");
-	printf(" -------------------------------------------------------------------------------------------------------\n");
+void add(){
+    /*
+    FILE *fp;
+    int valid,index;
+    char c;
+
+    do{
+    system("cls");
+    printf("|\t      ======================== Stock Management System ========================   \t\t|\n");
+    int idcompany; //comparing ID if file != NULL
+    fp = fopen("file.txt",w+); //change to a+
+    fprintf(fp,"%s","testfile");
+    if((fp = fopen(file.txt,w+)!= NULL)){
+
+    }
+
+
+
+
+    }while ();
+   
+    */
+}
+int main(){
+    /*mode  w = only write end in program
+            a = append to old file
+            r = only Read
+            w+,a+,r+
+   */ 
+   FILE *fp;
+   fp = fopen("textf.txt",w); // append
+   fprintf(fp,"Test : 1\n");
+   fprintf(fp,"Test2 :\n");
+   fprintf(fp,"%s %f\n","Test3 :",2);
+   fclose(fp);
+   /* 
+   int i;
+   for(i = 0 ; i < 0 ; i++){
+        printf("%d",&i);
+   }
+   */
 }
