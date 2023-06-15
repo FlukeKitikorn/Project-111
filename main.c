@@ -7,7 +7,7 @@
 #include "function.h"
 
 /*
-void login();
+//void login();
  typedef struct{
 	char name_product[20],name_product[20];
 	int id_product;

@@ -4,6 +4,16 @@
 #include <string.h>
 #include <windows.h>
 #include <time.h>
+#include <ctype.h>
+
+struct customer{
+	char name_product[20],name_company[20];
+	int id_product;
+	int price;
+	int price_product;
+	int date_product; //date for rent
+	float weight_product;
+}ct;
 
 void login(void){
     int count = 0, i = 0;
@@ -54,38 +64,115 @@ void add(){
     char c;
 
     do{
-    system("cls");
-    printf("|\t      ======================== Stock Management System ========================   \t\t|\n");
-    int idcompany; //comparing ID if file != NULL
-    fp = fopen("file.txt",w+); //change to a+
-    fprintf(fp,"%s","testfile");
-    if((fp = fopen(file.txt,w+)!= NULL)){
+        system("cls");
+        printf("\t      ======================== Stock Management System ========================   \t\t\n");
+        int Id; //comparing ID if file != NULL
+        fp = fopen("D:\\Project-111\\text\\filecs.txt", "a+"); //change to a+
+        //fprintf(fp,"%s","testfile");
+        if((fp = fopen("D:\\Project-111\\text\\filecs.txt", "a+")) != NULL){
+            //add product code
+            I:
+            printf("\nEnter Code Product\t : ");
+            scanf("%i",&Id);
+            while (fscanf(fp,"%s %s ",ct.name_company, ct.name_product)!= EOF)
+            {
+                if(Id == ct.id_product){
+                    printf("\n\n\t-------------------> THE PRODUCT CODE ALREADY EXIST.\n");
+                    goto I;
+                }
+            }
+            ct.id_product = Id;
+        }
+        else{
+            printf("\nProduct Code\t :");
+            scanf("%i",&ct.id_product);
+        }
+        //add product name
+        do
+	    {
+		    char name_company[40];
+		    fflush(stdin);
+		    printf("\nEnter Company name\t :");
+		    gets(ct.name_company); // get input string
+		    ct.name_company[0]=toupper(ct.name_company[0]);
+		    //iterate for every character in string
+		    for (index=0; index<strlen(ct.name_company); ++index)
+		    {	//check if character is valid or not
+			    if(isalpha(ct.name_company[index]))
+			    	valid = 1;//is character
+			    else{
+			    	valid = 0;//is not character
+			    	break;
+			    }
+		    }
+		    if (!valid){
+			    printf("\n Name contain invalid character. Please 'Enter' again");
+			    getch();	
+		    }
+	    }while(!valid);
 
+    }while ((c = getch()) =='\r');
+    */
+   FILE *fp;
+int valid, index;
+char c;
+
+do {
+    system("cls");
+    printf("\t      ======================== Stock Management System ========================   \t\t\n");
+    int Id; // comparing ID if file != NULL
+    fp = fopen("D:\\Project-111\\text\\filecs.txt", "a+"); // change to "a+"
+
+    if (fp != NULL) { // Check if the file was opened successfully
+        // Add product code
+        I:
+        printf("\nEnter Product Code\t : ");
+        scanf("%d", &Id);
+
+        while (fscanf(fp, "%s %s", ct.name_company, ct.name_product) != EOF) {
+            if (Id == ct.id_product) {
+                printf("\n\n\t-------------------> THE PRODUCT CODE ALREADY EXISTS.\n");
+                goto I;
+            }
+        }
+
+        ct.id_product = Id;
+    } else {
+        printf("\nProduct Code\t :");
+        scanf("%d", &ct.id_product);
     }
 
+    // Add product name
+    do {
+        fflush(stdin);
+        printf("\nEnter Company name\t : ");
+        gets(ct.name_company);
+        ct.name_company[0] = toupper(ct.name_company[0]);
 
+        for (index = 0; index < strlen(ct.name_company); ++index) {
+            if (isalpha(ct.name_company[index]))
+                valid = 1; // character is valid
+            else {
+                valid = 0; // character is not valid
+                break;
+            }
+        }
 
+        if (!valid) {
+            printf("\n Name contains invalid characters. Please enter again.");
+            getch();
+        }
+    } while (!valid);
 
-    }while ();
-   
-    */
+    // Write data to the file
+    fprintf(fp, "%s %s\n", ct.name_company, ct.name_product);
+
+    fclose(fp); // Close the file
+
+} while ((c = getch()) == '\r');
+
 }
+
 int main(){
-    /*mode  w = only write end in program
-            a = append to old file
-            r = only Read
-            w+,a+,r+
-   */ 
-   FILE *fp;
-   fp = fopen("textf.txt",w); // append
-   fprintf(fp,"Test : 1\n");
-   fprintf(fp,"Test2 :\n");
-   fprintf(fp,"%s %f\n","Test3 :",2);
-   fclose(fp);
-   /* 
-   int i;
-   for(i = 0 ; i < 0 ; i++){
-        printf("%d",&i);
-   }
-   */
+    add();
 }
