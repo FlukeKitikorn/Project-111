@@ -7,7 +7,7 @@
 #include <ctype.h>
 
 struct customer{
-	char name_product[20],name_company[20];
+	char name_product[20],name_company[20],weight_str[20];
 	int id_product;
 	int price;
 	int price_product;
@@ -142,7 +142,7 @@ do {
         scanf("%d", &ct.id_product);
     }
 
-    // Add product name
+    // Add product Company name
     do {
         fflush(stdin);
         printf("\nEnter Company name\t : ");
@@ -157,21 +157,79 @@ do {
                 break;
             }
         }
-
         if (!valid) {
             printf("\n Name contains invalid characters. Please enter again.");
             getch();
         }
     } while (!valid);
+    // Add product name
+    do {
+        fflush(stdin);
+        printf("\nEnter Product name\t : ");
+        gets(ct.name_product);
+        ct.name_product[0] = toupper(ct.name_product[0]);
 
+        for (index = 0; index < strlen(ct.name_product); ++index) {
+            if (isalpha(ct.name_product[index]))
+                valid = 1; // character is valid
+            else {
+                valid = 0; // character is not valid
+                break;
+            }
+        }
+        if (!valid) {
+            printf("\n Name contains invalid characters. Please enter again.");
+            getch();
+        }
+    } while (!valid);
+    //Add weight of product
+    do {
+        fflush(stdin);
+        printf("\nEnter Weight of Product(kg.)\t : ");
+        fgets(ct.weight_str, sizeof(ct.weight_str), stdin);
+        //ct.name_product[0] = toupper(ct.name_product[0]);
+        size_t len = strlen(ct.weight_str);
+        if (ct.weight_str[len - 1] == '\n') {
+            ct.weight_str[len - 1] = '\0';
+        }
+        valid = 1;
+        for (size_t index = 0; index < strlen(ct.weight_str); ++index) {
+            if (!isdigit(ct.weight_str[index]) && ct.weight_str[index] != '.'){
+                valid = 0; // not character --> digits
+                break;
+            }
+        }
+        if (valid) {
+            ct.weight_product = atof(ct.weight_str);
+            break;
+        }else{
+            printf("\n Name contains invalid characters. Please enter again.");
+            getch();
+        }
+    } while (valid);
+    //Add date of rental
+    do {    
+        fflush(stdin);
+        printf("\nEnter the number of days to rent\t : ");
+        //scanf("%d",&ct.date_product);
+        if (scanf("%d",&ct.date_product) >= 1 && (ct.date_product > 0)){
+            valid = 1;
+        }else{
+            valid = 0;
+            break;
+        }
+        if (!valid){
+            printf("\n Name contains invalid characters. Please enter again.");
+            getch(); 
+        }
+    } while (!valid);
     // Write data to the file
-    fprintf(fp, "%s %s\n", ct.name_company, ct.name_product);
-
+    fprintf(fp, "%s %s %.2f %d\n", ct.name_company, ct.name_product, ct.weight_product, ct.date_product);
     fclose(fp); // Close the file
 
-} while ((c = getch()) == '\r');
+} while ((c = getch())  == '\r');
 
-}
+}//end func add
 
 int main(){
     add();
