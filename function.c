@@ -17,7 +17,7 @@ struct customer{
 
 void login(void){
     int count = 0, i = 0;
-    char user_name[10],c = ' ';
+    char user_name[10],check = ' ';
     char user_pass[10],code[10];
     char admin_user[10] = "user";
     char admin_pass[10] = "pass";
@@ -29,8 +29,8 @@ printf(" -----------------------------------------------------------------------
 	    printf(" \n\t\t\t\t     PASSWORD: ");
         while(i<10){
             user_pass[i] = getch();
-            c = user_pass[i];
-            if (c == 13){break;} //limit size of user
+            check = user_pass[i];
+            if (check == 13){break;} //limit size of user
             else {printf("*");}
             i++;
         }
@@ -56,66 +56,61 @@ printf(" -----------------------------------------------------------------------
     getch();
     system("cls");
 }
+/*
+void list_menu() {
+    time_t t;
+    int choice;
+    printf(" -------------------------------------------------------------------------------------------------------\n");
+    printf("\t\t\t\t\t%s", ctime(&t));
+    printf(" -------------------------------------------------------------------------------------------------------\n");
+    printf("|\t      ======================== Stock Management System ========================   \t\t|\n");
+    printf("|\t\t\t\t\t\t\t\t\t\t\t\t\t|\n");
+    printf("|\t\t\t\t\t\t\t\t\t\t\t\t\t|\n");
+    printf("|\t\t\t\t< 1 > Add Product\t\t\t\t\t\t\t|\n");
+    printf("|\t\t\t\t< 2 > Edit Product Detail\t\t\t\t\t\t|\n");
+    printf("|\t\t\t\t< 3 > Delete Product \t\t\t\t\t\t\t|\n");
+    printf("|\t\t\t\t< 4 > Search Product \t\t\t\t\t\t\t|\n");
+    printf("|\t\t\t\t< 5 > Show Stock \t\t\t\t\t\t\t|\n");
+    printf("|\t\t\t\t< 6 > Show Bills \t\t\t\t\t\t\t|\n");
+    printf("|\t\t\t\t< 7 > Exit \t\t\t\t\t\t\t\t|\n");
+    printf("|\t\t\t  =======================================\t\t\t\t\t|\n");
+    printf(" \t\t\t     Please select your choice [1-7]: ");
+    scanf("%d", &choice);
+    system("cls");
 
+    switch (choice) {
+        case 1:
+            add();
+            break;
+        case 2:
+            printf("2");
+            break;
+        case 3:
+            printf("3");
+            break;
+        case 4:
+            search();
+            break;
+        case 5:
+            printf("5");
+            break;
+        case 6:
+            printf("6");
+            break;
+        case 7:
+            printf("System is exiting........");
+            printf("7");
+            break;
+        default:
+            printf("Invalid Input \nSystem Exit.......\n");
+            getchar();
+    }
+}
+*/
 void add(){
-    /*
-    FILE *fp;
-    int valid,index;
-    char c;
-
-    do{
-        system("cls");
-        printf("\t      ======================== Stock Management System ========================   \t\t\n");
-        int Id; //comparing ID if file != NULL
-        fp = fopen("D:\\Project-111\\text\\filecs.txt", "a+"); //change to a+
-        //fprintf(fp,"%s","testfile");
-        if((fp = fopen("D:\\Project-111\\text\\filecs.txt", "a+")) != NULL){
-            //add product code
-            I:
-            printf("\nEnter Code Product\t : ");
-            scanf("%i",&Id);
-            while (fscanf(fp,"%s %s ",ct.name_company, ct.name_product)!= EOF)
-            {
-                if(Id == ct.id_product){
-                    printf("\n\n\t-------------------> THE PRODUCT CODE ALREADY EXIST.\n");
-                    goto I;
-                }
-            }
-            ct.id_product = Id;
-        }
-        else{
-            printf("\nProduct Code\t :");
-            scanf("%i",&ct.id_product);
-        }
-        //add product name
-        do
-	    {
-		    char name_company[40];
-		    fflush(stdin);
-		    printf("\nEnter Company name\t :");
-		    gets(ct.name_company); // get input string
-		    ct.name_company[0]=toupper(ct.name_company[0]);
-		    //iterate for every character in string
-		    for (index=0; index<strlen(ct.name_company); ++index)
-		    {	//check if character is valid or not
-			    if(isalpha(ct.name_company[index]))
-			    	valid = 1;//is character
-			    else{
-			    	valid = 0;//is not character
-			    	break;
-			    }
-		    }
-		    if (!valid){
-			    printf("\n Name contain invalid character. Please 'Enter' again");
-			    getch();	
-		    }
-	    }while(!valid);
-
-    }while ((c = getch()) =='\r');
-    */
    FILE *fp;
-int valid, index;
-char c;
+    int valid, index;
+    char c;
 
 do {
     system("cls");
@@ -158,7 +153,7 @@ do {
             }
         }
         if (!valid) {
-            printf("\n Name contains invalid characters. Please enter again.");
+            printf("\n\t ------------------->Name contains invalid characters. Please enter again.");
             getch();
         }
     } while (!valid);
@@ -178,7 +173,7 @@ do {
             }
         }
         if (!valid) {
-            printf("\n Name contains invalid characters. Please enter again.");
+            printf("\n\t ------------------->Name contains invalid characters. Please enter again.");
             getch();
         }
     } while (!valid);
@@ -203,7 +198,7 @@ do {
             ct.weight_product = atof(ct.weight_str);
             break;
         }else{
-            printf("\n Name contains invalid characters. Please enter again.");
+            printf("\n\t ------------------->Name contains invalid characters. Please enter again.");
             getch();
         }
     } while (valid);
@@ -212,25 +207,50 @@ do {
         fflush(stdin);
         printf("\nEnter the number of days to rent\t : ");
         //scanf("%d",&ct.date_product);
-        if (scanf("%d",&ct.date_product) >= 1 && (ct.date_product > 0)){
+        if (scanf("%d",&ct.date_product) > 0){
             valid = 1;
         }else{
             valid = 0;
             break;
         }
         if (!valid){
-            printf("\n Name contains invalid characters. Please enter again.");
+            printf("\n\t ------------------->Name contains invalid characters. Please enter again.");
             getch(); 
         }
     } while (!valid);
     // Write data to the file
     fprintf(fp, "%s %s %.2f %d\n", ct.name_company, ct.name_product, ct.weight_product, ct.date_product);
     fclose(fp); // Close the file
-
+    printf("\n------------------->Press 'Enter' to add more item | Press any key to go to main menu");
 } while ((c = getch())  == '\r');
-
+    //list_menu();
 }//end func add
 
-int main(){
-    add();
-}
+void search(){
+    char input_keyword[50],c;
+    int found = 0;
+    FILE *fp;
+    fp = fopen("D:\\Project-111\\text\\filecs.txt", "r"); //open to read
+    printf("\n Enter Keyword to search: ");
+    fflush(stdin);
+    gets(input_keyword);
+    input_keyword[0] = toupper(input_keyword[0]);
+    while (!feof(fp) && found == 0){
+        fscanf(fp, "%s %s %f %d\n", ct.name_company, ct.name_product, &ct.weight_product, &ct.date_product);
+        if(strcmp(input_keyword,ct.name_company)== 0){
+            found = 1;
+        }
+    }
+    if(found){
+        printf(" -------------------Record found-----------------------\n");
+        printf(" Company name: %s \n Product name: %s \n Weight Product(Kg.): %.2f\n Amount of rental days: %d\n",ct.name_company, ct.name_product, ct.weight_product, ct.date_product);
+        printf(" ------------------------------------------------------\n");
+    }else{
+        printf(" -------------------Record not found-------------------\n");        
+    }fclose(fp); // close tha file
+    printf("Press any key to go to main menu");
+    while(c == getch() == '\r');
+
+}//end search func
+
+//void del_product()

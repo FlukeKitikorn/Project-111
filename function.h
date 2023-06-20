@@ -3,8 +3,9 @@
 
 void login();
 void add();
+void list_menu();
+void search();
 /*
-void reserch_company();
 void del_product();
 void edit();
 void read_file();

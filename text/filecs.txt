@@ -1,1 +1,5 @@
 Name Surname 23.40 23
+Star Cereal 30.00 23
+Tra Ool 12.50 23
+Lam Lolo 23.70 36
+Laly Pizza 20.00 40
