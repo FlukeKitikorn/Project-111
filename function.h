@@ -5,10 +5,10 @@ void login();
 void add();
 void list_menu();
 void search();
-/*
 void del_product();
-void edit();
-void read_file();
-void cal(); 
+/*
+void edit_info();
+void read_product();
+void bills(); 
 */
 #endif

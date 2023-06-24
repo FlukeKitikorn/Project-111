@@ -253,4 +253,39 @@ void search(){
 
 }//end search func
 
-//void del_product()
+void del_product(void) {
+    char target[20], c;
+    FILE *fp, *fn;
+    int found = 0;
+
+    fp = fopen("D:\\Project-111\\text\\filecs.txt", "r");
+    fn = fopen("D:\\Project-111\\text\\file_edit.txt", "w+");
+
+    printf("\nEnter name Company to Delete: ");
+    fflush(stdin);
+    scanf("%s", target);
+    target[0] = toupper(target[0]);
+
+    while (fscanf(fp, "%s %s %f %d\n", ct.name_company, ct.name_product, &ct.weight_product, &ct.date_product) != EOF) {
+        if (strcmp(target, ct.name_company) == 0 || strcmp(target, ct.name_product) == 0) {
+            found = 1;
+        } else {
+            fprintf(fn, "%s %s %f %d\n", ct.name_company, ct.name_product, ct.weight_product, ct.date_product);
+        }
+    }
+    if (!found) {
+        printf("\nRecord not found!");
+        getch();
+        //menu
+    } else {
+        printf("\nRecord deleted!");
+    }
+    fclose(fp);
+    fclose(fn);
+    remove("D:\\Project-111\\text\\filecs.txt");
+    rename("D:\\Project-111\\text\\file_edit.txt", "D:\\Project-111\\text\\filecs.txt");
+
+    printf("\n\n\n\t\t\t\tPress any key to continue...");
+    while ((c = getch()) == '\r');
+    //menu();
+}
