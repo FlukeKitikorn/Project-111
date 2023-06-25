@@ -9,7 +9,6 @@
 struct customer{
 	char name_product[20],name_company[20],weight_str[20];
 	int id_product;
-	int price;
 	int price_product;
 	int date_product; //date for rent
 	float weight_product;
@@ -261,7 +260,7 @@ void del_product(void) {
     fp = fopen("D:\\Project-111\\text\\filecs.txt", "r");
     fn = fopen("D:\\Project-111\\text\\file_edit.txt", "w+");
 
-    printf("\nEnter name Company to Delete: ");
+    printf("\n Enter name Company to Delete: ");
     fflush(stdin);
     scanf("%s", target);
     target[0] = toupper(target[0]);
@@ -274,11 +273,12 @@ void del_product(void) {
         }
     }
     if (!found) {
-        printf("\nRecord not found!");
+        printf(" -------------------Record not found!-----------------------\n");
+        printf("\n\n\n\t\t\t\tPress any key to continue...");
         getch();
         //menu
     } else {
-        printf("\nRecord deleted!");
+        printf(" -------------------Record deleted-----------------------\n");
     }
     fclose(fp);
     fclose(fn);
@@ -288,4 +288,115 @@ void del_product(void) {
     printf("\n\n\n\t\t\t\tPress any key to continue...");
     while ((c = getch()) == '\r');
     //menu();
+} //end func tion del_product
+
+void bills(){
+    FILE *fp,*fn;
+    int discount = 0;
+    char c;
+    ct.price_product = 1500;
+
+    fn = fopen("D:\\Project-111\\text\\file_bills.txt", "w+"); //file bills
+    fp = fopen("D:\\Project-111\\text\\filecs.txt", "r");
+    if(fp==NULL){
+        printf(" -------------------Record not found!-----------------------");
+        printf("\n\n\n\t\t\t\tPress any key to go to Main Menu!");
+        getch();
+        //menu
+    }else{
+        while(fscanf(fp, "%s %s %f %d\n", ct.name_company, ct.name_product, &ct.weight_product, &ct.date_product) != EOF){
+        if(ct.weight_product >= 80){ //มากกว่า 80 กิโลกรัม
+            ct.price_product += (ct.date_product * 50); //วันละ 50 
+        }else if (((ct.weight_product > 80)&&(ct.weight_product <= 1000)) && ((ct.date_product > 30)&&(ct.date_product <= 75))){
+            discount = ct.price_product * 0.15;//15%
+            ct.price_product += (ct.date_product * 50)-discount ;
+        }else if ((ct.weight_product >= 1000)&&(ct.weight_product <= 2000) && (ct.date_product > 75)){
+            discount = ct.price_product * 0.45;//45%
+            ct.price_product += (ct.date_product * 50)-discount;
+        }
+        fprintf(fn,"%s %s %.2f %d %d\n", ct.name_company, ct.name_product, ct.weight_product, ct.date_product, ct.price_product);
+        }
+    }
+    fclose(fp);
+    fclose(fn);
+    printf("\n\n\n\t\t\t\tPress any key to go to Main Menu!");
+    while ((c = getch()) == '\r');
+}//end func bills 
+
+void read_info(){
+    FILE *fp;
+    int choice, found = 0, i, j;
+    char c,name[20];
+    fp = fopen("D:\\Project-111\\text\\file_bills.txt", "r");
+    if (fp != NULL){
+        I:
+        printf(" -------------------------------------------------------------------------------------------------------\n");
+        printf("\t\t\t\tPlease select choice \n");
+        printf("|\t\t\t\t< 1 > Show All\t\t\t\t\t\t\t|\n");
+        printf("|\t\t\t\t< 2 > Show Company\t\t\t\t\t\t|\n");
+        printf(" \t\t\t     Please select your choice [1/2]: ");
+        scanf("%d",&choice);
+        switch (choice)
+        {
+        case 1://All
+            system("cls");
+            gotoxy(0,5);
+			for(i=0;i<100;i++){
+			    printf("-");
+		    }
+		    gotoxy(5,6);
+		    printf("Product ID");
+		    gotoxy(25,6);
+		    printf("Product Company");
+		    gotoxy(40,6);
+		    printf("Product Detail");
+		    gotoxy(60,6);
+		    printf("Product Weight");
+		    gotoxy(80,6);
+		    printf("Rental of Product\n");
+            gotoxy(100,6);
+            printf("Product Price\n");
+		    for(i=0;i<100;i++){
+			    printf("-");
+		    }
+		    j=8;
+		while(fscanf(fp,"%d %s %s %f %d %d\n", &ct.id_product, ct.name_company, ct.name_product, &ct.weight_product, &ct.date_product, &ct.price_product)!=EOF)
+		{
+			gotoxy(5,j);
+			printf("%d",ct.id_product);
+			gotoxy(25,j);
+			printf("%s",ct.name_company);
+			gotoxy(40,j);
+			printf("%s",ct.name_product);
+			gotoxy(60,j);
+			printf("%.2f",ct.weight_product);
+			gotoxy(80,j);
+			printf("%d",ct.date_product);
+            gotoxy(100,j);
+            printf("%d",ct.price_product);
+			j++;
+		}printf("\n");
+		for(i=0;i<100;i++)
+			printf("-");
+            break;
+        case 2://by company
+            system("cls");
+            break;
+        default:
+            printf("Invalid Choice! System Exit\n");
+            getch();
+            system("cls");
+            goto I;
+            break;
+        }
+    }else{
+        printf("\n\n\n\t\t\t\tPress any key to go to Main Menu!");
+        getch();
+        //menu
+    }
+    fclose(fp);
+}
+
+int main(){
+    read_info();
 }

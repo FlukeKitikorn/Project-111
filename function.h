@@ -6,9 +6,10 @@ void add();
 void list_menu();
 void search();
 void del_product();
+void read_info();
+void bills();
 /*
 void edit_info();
-void read_product();
-void bills(); 
+ 
 */
 #endif
