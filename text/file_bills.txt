@@ -1,4 +1,2 @@
-Name Surname 23.40 23 1500
-Star Cereal 30.00 23 1500
-Tra Ool 12.50 23 1500
-Laly Pizza 20.00 40 1500
+23 Aum Aumi 44.60 23 1500
+1 Asd Sdg 234.00 345 18750

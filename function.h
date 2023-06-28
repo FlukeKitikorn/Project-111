@@ -5,11 +5,9 @@ void login();
 void add();
 void list_menu();
 void search();
-void del_product();
+void del_product(void);
 void read_info();
 void bills();
-/*
 void edit_info();
- 
-*/
+
 #endif
