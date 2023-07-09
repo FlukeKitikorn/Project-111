@@ -6,6 +6,8 @@
         "windows.h": "c",
         "stdlib.h": "c",
         "function.h": "c",
-        "typeinfo": "c"
+        "typeinfo": "c",
+        "ctype.h": "c",
+        "time.h": "c"
     }
 }

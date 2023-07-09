@@ -11,7 +11,7 @@
 struct customer{
 	char name_product[20],name_company[20],weight_str[20];
 	int id_product;
-	int price_product;
+	float price_product;
 	int date_product; //date for rent
 	float weight_product;
 }ct;
@@ -95,6 +95,7 @@ void list_menu() {
             break;
         case 5:
             bills();
+            read_info();
             break;
         case 6:
             printf("System is exiting........");
@@ -312,40 +313,189 @@ void del_product(void) {
     list_menu();
 } //end function del_product
 
-void bills(){
-    FILE *fp,*fn;
-    int discount = 0;
-    char c;
-    ct.price_product = 1500;
+void bills() {
+    FILE *fp, *fn;
+    float price_product,discount,base_price;
 
-    fn = fopen("D:\\Project-111\\text\\file_bills.txt", "w"); //file bills
-    fp = fopen("D:\\Project-111\\text\\filecs.txt", "r");
-    if(fp==NULL){
-        printf(" \n ------------------------------------------Record not found!------------------------------------------\n");   
+    fp = fopen("D:\\Project-111\\text\\filecs.txt", "r"); // เปลี่ยนเป็นชื่อไฟล์ .txt ที่มีข้อมูล id namecompany product weight date
+    fn = fopen("D:\\Project-111\\text\\file_bills.txt", "w"); // ชื่อไฟล์ .txt ที่ต้องการเขียนข้อมูลลงไป
+
+    if (fp == NULL) {
+        printf("File not found!\n");
+        getch();
         list_menu();
-    }else{
-        while(fscanf(fp, " %d %s %s %f %d\n", &ct.id_product, ct.name_company, ct.name_product, &ct.weight_product, &ct.date_product) != EOF){
-        if(ct.weight_product >= 80){ //มากกว่า 80 กิโลกรัม
-            ct.price_product += (ct.date_product * 50); //วันละ 50 
-        }else if (((ct.weight_product > 80)&&(ct.weight_product <= 1000)) && ((ct.date_product > 30)&&(ct.date_product <= 75))){
-            discount = ct.price_product * 0.15;//15%
-            ct.price_product += (ct.date_product * 50)-discount ;
-        }else if ((ct.weight_product >= 1000)&&(ct.weight_product <= 2000) && (ct.date_product > 75)){
-            discount = ct.price_product * 0.45;//45%
-            ct.price_product += (ct.date_product * 50)-discount;
+    }
+    while (fscanf(fp, "%d %s %s %f %d", &ct.id_product, ct.name_company, ct.name_product, &ct.weight_product, &ct.date_product) != EOF) {
+        if((ct.weight_product > 0)&&(ct.weight_product < 500)){ // small size
+            if (ct.weight_product > 0 && ct.weight_product < 50){
+                base_price = 25;
+                if (ct.date_product <= 90 && ct.date_product < 150){ //ต่ำกว่า 4เดือน
+                    price_product = base_price * ct.date_product;
+                }else if (ct.date_product >= 150 && ct.date_product < 210){ //5เดือน - 6เดือน
+                    discount = (base_price * ct.date_product) * 0.1; //10%
+                    price_product = (base_price * ct.date_product) - discount;
+                }else if(ct.date_product >= 210 && ct.date_product < 270){ //7เดือน - 8เดือน
+                    discount = (base_price * ct.date_product) * 0.15; // 15%
+                    price_product = (base_price * ct.date_product) - discount;
+                }else if(ct.date_product >= 270 && ct.date_product < 360){ //9เดือน - 11เดือน
+                    discount = (base_price * ct.date_product) * 0.25; //25%
+                    price_product = (base_price * ct.date_product) - discount;
+                }else{ //12เดือนขั้นไป
+                    discount = (base_price * ct.date_product) * 0.5; //50%
+                    price_product = (base_price * ct.date_product) - discount;
+                }
+            }else if(ct.weight_product >= 50 && ct.weight_product < 100){
+                base_price = 70;
+                if (ct.date_product <= 90 && ct.date_product < 150){ //ต่ำกว่า 4เดือน
+                    price_product = base_price * ct.date_product;
+                }else if (ct.date_product >= 150 && ct.date_product < 210){ //5เดือน - 6เดือน
+                    discount = (base_price * ct.date_product) * 0.1; //10%
+                    price_product = (base_price * ct.date_product) - discount;
+                }else if(ct.date_product >= 210 && ct.date_product < 270){ //7เดือน - 8เดือน
+                    discount = (base_price * ct.date_product) * 0.15; // 15%
+                    price_product = (base_price * ct.date_product) - discount;
+                }else if(ct.date_product >= 270 && ct.date_product < 360){ //9เดือน - 11เดือน
+                    discount = (base_price * ct.date_product) * 0.25; //25%
+                    price_product = (base_price * ct.date_product) - discount;
+                }else{ //12เดือนขั้นไป
+                    discount = (base_price * ct.date_product) * 0.5; //50%
+                    price_product = (base_price * ct.date_product) - discount;
+                }
+            }else if(ct.weight_product >= 100 && ct.weight_product < 200){
+                base_price = 100;
+                if (ct.date_product <= 90 && ct.date_product < 150){ //ต่ำกว่า 4เดือน
+                    price_product = base_price * ct.date_product;
+                }else if (ct.date_product >= 150 && ct.date_product < 210){ //5เดือน - 6เดือน
+                    discount = (base_price * ct.date_product) * 0.1; //10%
+                    price_product = (base_price * ct.date_product) - discount;
+                }else if(ct.date_product >= 210 && ct.date_product < 270){ //7เดือน - 8เดือน
+                    discount = (base_price * ct.date_product) * 0.15; // 15%
+                    price_product = (base_price * ct.date_product) - discount;
+                }else if(ct.date_product >= 270 && ct.date_product < 360){ //9เดือน - 11เดือน
+                    discount = (base_price * ct.date_product) * 0.25; //25%
+                    price_product = (base_price * ct.date_product) - discount;
+                }else{ //12เดือนขั้นไป
+                    discount = (base_price * ct.date_product) * 0.5; //50%
+                    price_product = (base_price * ct.date_product) - discount;
+                }
+            }else if(ct.weight_product >= 200 && ct.weight_product < 500){
+                base_price = 150;
+                if (ct.date_product <= 90 && ct.date_product < 150){ //ต่ำกว่า 4เดือน
+                    price_product = base_price * ct.date_product;
+                }else if (ct.date_product >= 150 && ct.date_product < 210){ //5เดือน - 6เดือน
+                    discount = (base_price * ct.date_product) * 0.1; //10%
+                    price_product = (base_price * ct.date_product) - discount;
+                }else if(ct.date_product >= 210 && ct.date_product < 270){ //7เดือน - 8เดือน
+                    discount = (base_price * ct.date_product) * 0.15; // 15%
+                    price_product = (base_price * ct.date_product) - discount;
+                }else if(ct.date_product >= 270 && ct.date_product < 360){ //9เดือน - 11เดือน
+                    discount = (base_price * ct.date_product) * 0.25; //25%
+                    price_product = (base_price * ct.date_product) - discount;
+                }else{ //12เดือนขั้นไป
+                    discount = (base_price * ct.date_product) * 0.5; //50%
+                    price_product = (base_price * ct.date_product) - discount;
+                }
+            }
         }
-        fprintf(fn,"%d %s %s %.2f %d %d\n", ct.id_product, ct.name_company, ct.name_product, ct.weight_product, ct.date_product, ct.price_product);
+        if((ct.weight_product >= 500)&&(ct.weight_product < 5000)){ //medium size
+            if (ct.weight_product >= 500 && ct.weight_product < 1000){
+                base_price = 1000;
+                if (ct.date_product <= 90 && ct.date_product < 150){ //ต่ำกว่า 4เดือน
+                    price_product = base_price * ct.date_product;
+                }else if (ct.date_product >= 150 && ct.date_product < 210){ //5เดือน - 6เดือน
+                    discount = (base_price * ct.date_product) * 0.1; //10%
+                    price_product = (base_price * ct.date_product) - discount;
+                }else if(ct.date_product >= 210 && ct.date_product < 270){ //7เดือน - 8เดือน
+                    discount = (base_price * ct.date_product) * 0.15; // 15%
+                    price_product = (base_price * ct.date_product) - discount;
+                }else if(ct.date_product >= 270 && ct.date_product < 360){ //9เดือน - 11เดือน
+                    discount = (base_price * ct.date_product) * 0.25; //25%
+                    price_product = (base_price * ct.date_product) - discount;
+                }else{ //12เดือนขั้นไป
+                    discount = (base_price * ct.date_product) * 0.5; //50%
+                    price_product = (base_price * ct.date_product) - discount;
+                }
+            }else if(ct.weight_product >= 1000 && ct.weight_product < 2500){
+                base_price = 2000;
+                if (ct.date_product <= 90 && ct.date_product < 150){ //ต่ำกว่า 4เดือน
+                    price_product = base_price * ct.date_product;
+                }else if (ct.date_product >= 150 && ct.date_product < 210){ //5เดือน - 6เดือน
+                    discount = (base_price * ct.date_product) * 0.1; //10%
+                    price_product = (base_price * ct.date_product) - discount;
+                }else if(ct.date_product >= 210 && ct.date_product < 270){ //7เดือน - 8เดือน
+                    discount = (base_price * ct.date_product) * 0.15; // 15%
+                    price_product = (base_price * ct.date_product) - discount;
+                }else if(ct.date_product >= 270 && ct.date_product < 360){ //9เดือน - 11เดือน
+                    discount = (base_price * ct.date_product) * 0.25; //25%
+                    price_product = (base_price * ct.date_product) - discount;
+                }else{ //12เดือนขั้นไป
+                    discount = (base_price * ct.date_product) * 0.5; //50%
+                    price_product = (base_price * ct.date_product) - discount;
+                }
+            }else if(ct.weight_product >= 2500 && ct.weight_product < 3500){
+                base_price = 3000;
+                if (ct.date_product <= 90 && ct.date_product < 150){ //ต่ำกว่า 4เดือน
+                    price_product = base_price * ct.date_product;
+                }else if (ct.date_product >= 150 && ct.date_product < 210){ //5เดือน - 6เดือน
+                    discount = (base_price * ct.date_product) * 0.1; //10%
+                    price_product = (base_price * ct.date_product) - discount;
+                }else if(ct.date_product >= 210 && ct.date_product < 270){ //7เดือน - 8เดือน
+                    discount = (base_price * ct.date_product) * 0.15; // 15%
+                    price_product = (base_price * ct.date_product) - discount;
+                }else if(ct.date_product >= 270 && ct.date_product < 360){ //9เดือน - 11เดือน
+                    discount = (base_price * ct.date_product) * 0.25; //25%
+                    price_product = (base_price * ct.date_product) - discount;
+                }else{ //12เดือนขั้นไป
+                    discount = (base_price * ct.date_product) * 0.5; //50%
+                    price_product = (base_price * ct.date_product) - discount;
+                }
+            }else if(ct.weight_product >= 3500 && ct.weight_product < 5000){
+                base_price = 4000;
+                if (ct.date_product <= 90 && ct.date_product < 150){ //ต่ำกว่า 4เดือน
+                    price_product = base_price * ct.date_product;
+                }else if (ct.date_product >= 150 && ct.date_product < 210){ //5เดือน - 6เดือน
+                    discount = (base_price * ct.date_product) * 0.1; //10%
+                    price_product = (base_price * ct.date_product) - discount;
+                }else if(ct.date_product >= 210 && ct.date_product < 270){ //7เดือน - 8เดือน
+                    discount = (base_price * ct.date_product) * 0.15; // 15%
+                    price_product = (base_price * ct.date_product) - discount;
+                }else if(ct.date_product >= 270 && ct.date_product < 360){ //9เดือน - 11เดือน
+                    discount = (base_price * ct.date_product) * 0.25; //25%
+                    price_product = (base_price * ct.date_product) - discount;
+                }else{ //12เดือนขั้นไป
+                    discount = (base_price * ct.date_product) * 0.5; //50%
+                    price_product = (base_price * ct.date_product) - discount;
+                }
+            }
         }
+        if(ct.weight_product >= 5000){ //น้ำหนัก > 5,000 large size
+            base_price = 5000;
+                if (ct.date_product <= 90 && ct.date_product < 150){ //ต่ำกว่า 4เดือน
+                    price_product = base_price * ct.date_product;
+                }else if (ct.date_product >= 150 && ct.date_product < 210){ //5เดือน - 6เดือน
+                    discount = (base_price * ct.date_product) * 0.1; //10%
+                    price_product = (base_price * ct.date_product) - discount;
+                }else if(ct.date_product >= 210 && ct.date_product < 270){ //7เดือน - 8เดือน
+                    discount = (base_price * ct.date_product) * 0.15; // 15%
+                    price_product = (base_price * ct.date_product) - discount;
+                }else if(ct.date_product >= 270 && ct.date_product < 360){ //9เดือน - 11เดือน
+                    discount = (base_price * ct.date_product) * 0.25; //25%
+                    price_product = (base_price * ct.date_product) - discount;
+                }else{ //12เดือนขั้นไป
+                    discount = (base_price * ct.date_product) * 0.5; //50%
+                    price_product = (base_price * ct.date_product) - discount;
+                }
+        }
+        fprintf(fn, "%d %s %s %.2f %d %.2f\n", ct.id_product, ct.name_company, ct.name_product, ct.weight_product, ct.date_product, price_product);
     }
     fclose(fp);
     fclose(fn);
-    read_info();
-}//end func bills 
+}
 
 void read_info(){
     FILE *fp;
-    int choice, found = 0, i = 0, j = 0;
-    char c,target[20],line[20];//line จำนวนบรรทัด
+    int choice, found = 0, i = 0;
+    char target[20];//line จำนวนบรรทัด
     struct customer ct[MAX_CUSTOMERS];
     fp = fopen("D:\\Project-111\\text\\file_bills.txt", "r");
     if (fp == NULL){
@@ -371,9 +521,8 @@ void read_info(){
             printf(" -------------------------------------------------------------------------------------------------------\n");
             printf("  ID\t    Company\t     Product Detail\tWeight(kg.)\tAmount of rental\tPricr(Baht)\n");
             printf(" -------------------------------------------------------------------------------------------------------\n");
-            //printf("%4d %14s %23s %14.2f %15d %23d",12,"AFTCN","asdasdasd",23.98,23,67489); Pattern for printf 
-            while (fscanf(fp,"%d %s %s %f %d %d\n", &ct[i].id_product, ct[i].name_company, ct[i].name_product, &ct[i].weight_product, &ct[i].date_product, &ct[i].price_product) != EOF){
-                printf("%4d %14s %23s %14.2f %15d %23d\n", ct[i].id_product, ct[i].name_company, ct[i].name_product, ct[i].weight_product, ct[i].date_product, ct[i].price_product);
+            while (fscanf(fp,"%d %s %s %f %d %f\n", &ct[i].id_product, ct[i].name_company, ct[i].name_product, &ct[i].weight_product, &ct[i].date_product, &ct[i].price_product) != EOF){
+                printf("%4d %14s %23s %14.2f %15d %23.2f\n", ct[i].id_product, ct[i].name_company, ct[i].name_product, ct[i].weight_product, ct[i].date_product, ct[i].price_product);
                 i++;
             }
             printf(" -------------------------------------------------------------------------------------------------------\n"); // edit here
@@ -384,28 +533,21 @@ void read_info(){
         case 2://by company
             system("cls");
             printf(" -------------------------------------------------------------------------------------------------------\n");
-            printf("\t\t\tEnter Company name: ");
+            printf("\t\t\t\t\tEnter Company name: ");
             fflush(stdin);
-            gets(target);
+            scanf("%s", &target);
             target[0] = toupper(target[0]);
             i = 0;
-            while (fscanf(fp,"%d %s %s %f %d %d\n", &ct[i].id_product, ct[i].name_company, ct[i].name_product, &ct[i].weight_product, &ct[i].date_product, &ct[i].price_product) != EOF){
-                if (strcmp(target, ct[i].name_company) == 0){ //เจอข้อมูลในไฟล์
-                    found = 1;
-                    break;
-                }
-                i++;
+            while (fscanf(fp,"%d %s %s %f %d %f\n", &ct[i].id_product, ct[i].name_company, ct[i].name_product, &ct[i].weight_product, &ct[i].date_product, &ct[i].price_product) != EOF){
+                if(strcmp(target, ct[i].name_company) != 0){
+                    printf(" -------------------------------------------------------------------------------------------------------\n");
+                    printf("  ID\t    Company\t     Product Detail\tWeight(kg.)\tAmount of rental\tPricr(Baht)\n");
+                    printf(" -------------------------------------------------------------------------------------------------------\n");
+                    continue;
+                }   
+                printf("%4d %14s %23s %14.2f %15d %23.2f\n", ct[i].id_product, ct[i].name_company, ct[i].name_product, ct[i].weight_product, ct[i].date_product, ct[i].price_product);
             }
-            if (found){
-                system("cls");
-                printf(" -------------------------------------------------------------------------------------------------------\n");
-                printf("  ID\t    Company\t     Product Detail\tWeight(kg.)\tAmount of rental\tPricr(Baht)\n");
-                printf(" -------------------------------------------------------------------------------------------------------\n");
-                for(j = 0; j <= i; j++){
-                    printf("%4d %14s %23s %14.2f %15d %23d\n", ct[j].id_product, ct[j].name_company, ct[j].name_product, ct[j].weight_product, ct[j].date_product, ct[j].price_product);
-                }
-                printf(" -------------------------------------------------------------------------------------------------------\n");
-            }else{
+            if (!found){
                 printf("\n-------------> Record not found,Go back to main menu....");
                 getch();
                 list_menu();
@@ -423,9 +565,10 @@ void read_info(){
 
 void edit_info(){
     int valid,ID,index,check;
-    char target[20],c;
+    char c;
     FILE *fp, *fn;
-    fp = fopen("D:\\Project-111\\text\\filecs.txt", "r");
+    fp = fopen("D:\\Project-111\\text\\filecs.txt", "r+");
+    fn = fopen("D:\\Project-111\\text\\file_edit_detail.txt", "w");
 
     printf(" -------------------------------------------------------------------------------------------------------\n");
     printf("\t      ======================== Stock Management System ========================   \t\t\n");
@@ -433,7 +576,6 @@ void edit_info(){
         printf(" \n ------------------------------------------Record not found!------------------------------------------\n"); 
         list_menu();
     }else{
-        fn = fopen("D:\\Project-111\\text\\file_edit_detail.txt", "a");
         system("cls");
         printf("\n ---> Enter Product Code for edit : ");
         scanf("%d",&ID);
@@ -448,10 +590,10 @@ void edit_info(){
 				printf("\n- Price\t\t\t: %.2f",ct.weight_product);
 				printf("\n- Product Code\t\t: %d",ct.date_product);
                 printf("\n --------------------------------------------------------------- \n");
-                printf("\n\n\t******** New Record ********");
+                printf("\n\t\t\t******** New Record ********");
             do { // company
                 fflush(stdin);
-                printf("\nEnter Company name\t : ");
+                printf("\n Enter Company name\t : ");
                 gets(ct.name_company);
                 ct.name_company[0] = toupper(ct.name_company[0]);
 
@@ -469,7 +611,8 @@ void edit_info(){
                 }
             } while (!valid);
 
-            do {
+            do { // Product detail
+                char name_product[20];
                 fflush(stdin);
                 printf("\nEnter Product name\t : ");
                 gets(ct.name_product);
@@ -488,8 +631,8 @@ void edit_info(){
                     getch();
                 }
             } while (!valid);
-                    //Add weight of product
-            do {
+                    
+            do {//Add weight of product
                 fflush(stdin);
                 printf("\nEnter Weight of Product(kg.)\t : ");
                 fgets(ct.weight_str, sizeof(ct.weight_str), stdin);
@@ -512,8 +655,8 @@ void edit_info(){
                     getch();
                 }
             } while (valid);
-                    //Add date of rental
-            do {    
+                    
+            do { //Add date of rental   
                 fflush(stdin);
                 printf("\nEnter the number of days to rent\t : ");
                 //scanf("%d",&ct.date_product);
@@ -527,24 +670,27 @@ void edit_info(){
                     printf("\n\t -------------> Name contains invalid characters. Please enter again.");
                     getch(); 
                 }
-            } while (!valid);
+            } while (!valid);//end add
                 printf("Press 'Y' to edit the existing record or any key to cancel...");
-                scanf("%c",&c);
+                c = getch();
                 if(c == 'y' || c == 'Y'){
                     fprintf(fn,"%d %s %s %.2f %d\n", ct.id_product, ct.name_company, ct.name_product, ct.weight_product, ct.date_product);
-                    printf("\n\n\t\tYOUR RECORD IS SUCCESSFULLY EDITED!!!");
+                    fflush(stdin);
+                    printf("\n\n\t\t\tYOUR RECORD IS SUCCESSFULLY EDITED!!!");
                 }
-            }else{//end add
+            }else{
                 fprintf(fn,"%d %s %s %.2f %d\n", ct.id_product, ct.name_company, ct.name_product, ct.weight_product, ct.date_product);
+                fflush(stdin);
             }
         }
         if (!check){
             printf("\n\nTHIS PRODUCT DOESN'T EXIST!!!!");
         }
-        fclose(fp);
         fclose(fn);
+        fclose(fp);
         remove("D:\\Project-111\\text\\filecs.txt");
         rename("D:\\Project-111\\text\\file_edit_detail.txt","D:\\Project-111\\text\\filecs.txt");
         getch();
-    }list_menu();
+    }
+    list_menu();
 }//end func edit_info 
