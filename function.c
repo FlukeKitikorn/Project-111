@@ -8,6 +8,15 @@
 
 #define MAX_CUSTOMERS 50 //จำนวนลูกค้า
 
+void login();
+void add();
+void list_menu();
+void search();
+void del_product(void);
+void read_info();
+void bills();
+void edit_info();
+
 struct customer{
 	char name_product[20],name_company[20],weight_str[20];
 	int id_product;
@@ -153,9 +162,9 @@ do {
 
         for (index = 0; index < strlen(ct.name_company); ++index) {
             if (isalpha(ct.name_company[index]))
-                valid = 1; // character is valid
+                valid = 1; // is character  
             else {
-                valid = 0; // character is not valid
+                valid = 0; // is not character  
                 break;
             }
         }
@@ -173,9 +182,9 @@ do {
 
         for (index = 0; index < strlen(ct.name_product); ++index) {
             if (isalpha(ct.name_product[index]))
-                valid = 1; // character is valid
+                valid = 1; // is character  
             else {
-                valid = 0; // character is not valid
+                valid = 0; // is not character 
                 break;
             }
         }
@@ -189,8 +198,7 @@ do {
         fflush(stdin);
         printf("\nEnter Weight of Product(kg.)\t : ");
         fgets(ct.weight_str, sizeof(ct.weight_str), stdin);
-        //ct.name_product[0] = toupper(ct.name_product[0]);
-        size_t len = strlen(ct.weight_str);
+        size_t len = strlen(ct.weight_str); 
         if (ct.weight_str[len - 1] == '\n') {
             ct.weight_str[len - 1] = '\0';
         }
@@ -202,7 +210,7 @@ do {
             }
         }
         if (valid) {
-            ct.weight_product = atof(ct.weight_str);
+            ct.weight_product = atof(ct.weight_str); // change array to float
             break;
         }else{
             printf("\n\t ------------------->Name contains invalid characters. Please enter again.");
@@ -213,11 +221,10 @@ do {
     do {    
         fflush(stdin);
         printf("\nEnter the number of days to rent\t : ");
-        //scanf("%d",&ct.date_product);
         if (scanf("%d",&ct.date_product) > 0){
-            valid = 1;
+            valid = 1; // more than 0
         }else{
-            valid = 0;
+            valid = 0; // lower 0
             break;
         }
         if (!valid){
@@ -244,7 +251,7 @@ void search(){
     fflush(stdin);
     gets(input_keyword);
     input_keyword[0] = toupper(input_keyword[0]);
-    while (!feof(fp) && found == 0){
+    while (!feof(fp) && found == 0){ // check end of file & finding
         fscanf(fp, "%d %s %s %f %d\n", &ct.id_product, ct.name_company, ct.name_product, &ct.weight_product, &ct.date_product);
         if(strcmp(input_keyword,ct.name_company)== 0){
             found = 1;
@@ -267,8 +274,8 @@ void del_product(void) {
     FILE *fp, *fn;
     int found = 0;
 
-    fp = fopen("D:\\Project-111\\text\\filecs.txt", "r");
-    fn = fopen("D:\\Project-111\\text\\file_edit.txt", "w+");
+    fp = fopen("D:\\Project-111\\text\\filecs.txt", "r"); //open for read
+    fn = fopen("D:\\Project-111\\text\\file_edit.txt", "w+"); //open for write & read
 
     printf(" -------------------------------------------------------------------------------------------------------\n");
     printf("\t      ======================== Stock Management System ========================   \t\t\n");
@@ -317,8 +324,8 @@ void bills() {
     FILE *fp, *fn;
     float price_product,discount,base_price;
 
-    fp = fopen("D:\\Project-111\\text\\filecs.txt", "r"); // เปลี่ยนเป็นชื่อไฟล์ .txt ที่มีข้อมูล id namecompany product weight date
-    fn = fopen("D:\\Project-111\\text\\file_bills.txt", "w"); // ชื่อไฟล์ .txt ที่ต้องการเขียนข้อมูลลงไป
+    fp = fopen("D:\\Project-111\\text\\filecs.txt", "r"); // open for read
+    fn = fopen("D:\\Project-111\\text\\file_bills.txt", "w"); // open for write
 
     if (fp == NULL) {
         printf("File not found!\n");
@@ -495,8 +502,8 @@ void bills() {
 void read_info(){
     FILE *fp;
     int choice, found = 0, i = 0;
-    char target[20];//line จำนวนบรรทัด
-    struct customer ct[MAX_CUSTOMERS];
+    char target[20];
+    struct customer ct[MAX_CUSTOMERS]; //amount of slot customers
     fp = fopen("D:\\Project-111\\text\\file_bills.txt", "r");
     if (fp == NULL){
         printf(" -------------------Record not found!-----------------------");
@@ -538,20 +545,25 @@ void read_info(){
             scanf("%s", &target);
             target[0] = toupper(target[0]);
             i = 0;
+            printf(" -------------------------------------------------------------------------------------------------------\n");
+            printf("  ID\t    Company\t     Product Detail\tWeight(kg.)\tAmount of rental\tPricr(Baht)\n");
+            printf(" -------------------------------------------------------------------------------------------------------\n");
             while (fscanf(fp,"%d %s %s %f %d %f\n", &ct[i].id_product, ct[i].name_company, ct[i].name_product, &ct[i].weight_product, &ct[i].date_product, &ct[i].price_product) != EOF){
-                if(strcmp(target, ct[i].name_company) != 0){
-                    printf(" -------------------------------------------------------------------------------------------------------\n");
-                    printf("  ID\t    Company\t     Product Detail\tWeight(kg.)\tAmount of rental\tPricr(Baht)\n");
-                    printf(" -------------------------------------------------------------------------------------------------------\n");
-                    continue;
-                }   
-                printf("%4d %14s %23s %14.2f %15d %23.2f\n", ct[i].id_product, ct[i].name_company, ct[i].name_product, ct[i].weight_product, ct[i].date_product, ct[i].price_product);
+                if (strcmp(target, ct[i].name_company) == 0) {
+                    printf("%4d %14s %23s %14.2f %15d %23.2f\n", ct[i].id_product, ct[i].name_company, ct[i].name_product, ct[i].weight_product, ct[i].date_product, ct[i].price_product);
+                    found = 1;
+                }
+                i++;
             }
             if (!found){
-                printf("\n-------------> Record not found,Go back to main menu....");
+                printf("\n\n-------------> Record not found,Go back to main menu....");
                 getch();
                 list_menu();
             }
+            printf(" -------------------------------------------------------------------------------------------------------\n"); 
+            printf("\n\nPress any key to go to main menu....");
+            getch();
+            list_menu();
             break;
         default:
             printf("\n-------------> Invalid Choice! System Exit,Please select again....");
@@ -567,8 +579,8 @@ void edit_info(){
     int valid,ID,index,check;
     char c;
     FILE *fp, *fn;
-    fp = fopen("D:\\Project-111\\text\\filecs.txt", "r+");
-    fn = fopen("D:\\Project-111\\text\\file_edit_detail.txt", "w");
+    fp = fopen("D:\\Project-111\\text\\filecs.txt", "r+"); //open for read & write
+    fn = fopen("D:\\Project-111\\text\\file_edit_detail.txt", "w"); //open for write
 
     printf(" -------------------------------------------------------------------------------------------------------\n");
     printf("\t      ======================== Stock Management System ========================   \t\t\n");
@@ -599,9 +611,9 @@ void edit_info(){
 
                 for (index = 0; index < strlen(ct.name_company); ++index) {
                     if (isalpha(ct.name_company[index]))
-                        valid = 1; // character is valid
+                        valid = 1; // is character 
                     else {
-                        valid = 0; // character is not valid
+                        valid = 0; // is not character 
                         break;
                     }
                 }
@@ -620,9 +632,9 @@ void edit_info(){
 
                 for (index = 0; index < strlen(ct.name_product); ++index) {
                     if (isalpha(ct.name_product[index]))
-                        valid = 1; // character is valid
+                        valid = 1; // is character  
                     else {
-                        valid = 0; // character is not valid
+                        valid = 0; // is not character 
                         break;
                     }
                 }
@@ -636,14 +648,13 @@ void edit_info(){
                 fflush(stdin);
                 printf("\nEnter Weight of Product(kg.)\t : ");
                 fgets(ct.weight_str, sizeof(ct.weight_str), stdin);
-                //ct.name_product[0] = toupper(ct.name_product[0]);
                 size_t len = strlen(ct.weight_str);
                 if (ct.weight_str[len - 1] == '\n') {
                     ct.weight_str[len - 1] = '\0';
                 }valid = 1;
                 for (size_t index = 0; index < strlen(ct.weight_str); ++index) {
                     if (!isdigit(ct.weight_str[index]) && ct.weight_str[index] != '.'){
-                        valid = 0; // not character --> digits
+                        valid = 0; // is not character --> digits
                         break;
                     }
                 }
@@ -659,7 +670,6 @@ void edit_info(){
             do { //Add date of rental   
                 fflush(stdin);
                 printf("\nEnter the number of days to rent\t : ");
-                //scanf("%d",&ct.date_product);
                 if (scanf("%d",&ct.date_product) > 0){
                     valid = 1;
                 }else{

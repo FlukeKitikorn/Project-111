@@ -5,7 +5,7 @@
 #include <windows.h>
 #include <time.h>
 #include "function.h"
-#include "function.c"
+//#include "function.c"
 
 int main()
 {	
