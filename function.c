@@ -40,13 +40,13 @@ printf(" -----------------------------------------------------------------------
         while(i<10){
             user_pass[i] = getch();
             check = user_pass[i];
-            if (check == 13){break;} //limit size of user
+            if (check == 13){break;} //limit size of user_pass
             else {printf("*");}
-            i++;
+            i++; // 0 - 9
         }
-        user_pass[i] = '\0'; //delete null character
+        user_pass[i] = '\0'; //delete '\n' by innitial '\0'
         i = 0;
-        if(strcmp(user_name,admin_user) == 0 && strcmp(user_pass,admin_pass) == 0)
+        if(strcmp(user_name,admin_user) == 0 && strcmp(user_pass,admin_pass) == 0) //true = 0
         {
             printf("  \n\n\n\t\t\t\t       \033[4mLOGIN IS SUCCESSFUL!!!\033[0m");
 	        printf("\n\n\n\t\t\t\t     Press any key to continue...");
@@ -55,13 +55,13 @@ printf(" -----------------------------------------------------------------------
 	        break;   
         }else{
             printf("\n\n\n\t\t\t\t   \033[4mSORRY !!!!  LOGIN IS UNSUCESSFUL\033[0m");
-            printf("\n\n\n\t\t\t\t          Please try again");
+            printf("\n\n\n\t\t\t\t   Please try again (%d times left)",3 - count);
 		    count++;
 		    getch();//holds the screen
         }
     }while(count <= 3);
         if(count > 3){
-            printf("\n\t\t \033[4mSorry you have entered the wrong username and password for four times!!!\033[0m");
+            printf("\n\n\t\t \033[4mSorry you have entered the wrong username and password for four times!!!\033[0m");
 		    getch();  //holds the screen
             exit(0);
             }
@@ -140,7 +140,7 @@ do {
         printf("\nEnter Product Code\t : ");
         scanf("%d", &Id);
 
-        while (fscanf(fp, "%s %s", ct.name_company, ct.name_product) != EOF) {
+        while (fscanf(fp, "%d %s %s %f %d",&ct.id_product, ct.name_company, ct.name_product, &ct.weight_product, &ct.date_product) != EOF) {
             if (Id == ct.id_product) {
                 printf("\n\n\t-------------------> THE PRODUCT CODE ALREADY EXISTS.\n");
                 goto I;
@@ -242,27 +242,34 @@ do {
 
 void search(){
     char input_keyword[50],c;
-    int found = 0;
+    int found = 0,i = 0,count = 0;
+    struct customer ct[MAX_CUSTOMERS];
     FILE *fp;
     fp = fopen("D:\\Project-111\\text\\filecs.txt", "r"); //open to read
     printf(" -------------------------------------------------------------------------------------------------------\n");
     printf("\t      ======================== Stock Management System ========================   \t\t\n");
-    printf("\n ---> Enter Keyword to search: ");
+    printf("\n ---> Enter Company to search: ");
     fflush(stdin);
-    gets(input_keyword);
+    scanf("%s", &input_keyword);
     input_keyword[0] = toupper(input_keyword[0]);
     while (!feof(fp) && found == 0){ // check end of file & finding
-        fscanf(fp, "%d %s %s %f %d\n", &ct.id_product, ct.name_company, ct.name_product, &ct.weight_product, &ct.date_product);
-        if(strcmp(input_keyword,ct.name_company)== 0){
-            found = 1;
+        while (fscanf(fp,"%d %s %s %f %d\n", &ct[i].id_product, ct[i].name_company, ct[i].name_product, &ct[i].weight_product, &ct[i].date_product) != EOF){
+            if (strcmp(input_keyword, ct[i].name_company) == 0) {
+                found = 1;
+                count += 1;
+                if(found && (count == 1)){
+                    printf(" \n ------------------------------------------Record found!----------------------------------------------\n"); 
+                }
+                printf(" Data product is ---(%d)\n",count);
+                printf(" Company name: %s \n Product name: %s \n Weight Product(Kg.): %.2f\n Amount of rental days: %d\n",ct[i].name_company, ct[i].name_product, ct[i].weight_product, ct[i].date_product);
+                printf(" ------------------------------------------------------\n");
+            }
+            i++;
         }
+    
     }
-    if(found){
-        printf(" \n ------------------------------------------Record found!----------------------------------------------\n"); 
-        printf(" Company name: %s \n Product name: %s \n Weight Product(Kg.): %.2f\n Amount of rental days: %d\n",ct.name_company, ct.name_product, ct.weight_product, ct.date_product);
-        printf(" ------------------------------------------------------\n");
-    }else{
-        printf(" \n ------------------------------------------Record not found!------------------------------------------\n");      
+    if(!found){
+        printf(" \n ------------------------------------------Record not found!------------------------------------------\n");
     }fclose(fp); // close tha file
     printf("\nPress any key to go to main menu....");
     while(c == getch() == '\r');
@@ -272,7 +279,7 @@ void search(){
 void del_product(void) {
     char target[20], check;
     FILE *fp, *fn;
-    int found = 0;
+    int found = 0,valid = 0;
 
     fp = fopen("D:\\Project-111\\text\\filecs.txt", "r"); //open for read
     fn = fopen("D:\\Project-111\\text\\file_edit.txt", "w+"); //open for write & read
@@ -294,22 +301,24 @@ void del_product(void) {
             scanf("%c",&check);
             if(check == 'Y' || check == 'y'){
                 found = 1;
+                continue;
             }else{
+                valid = 1; //เขียนลงไฟล์
                 goto I;
             }
         } else {
+            I:
             fprintf(fn, "%d %s %s %f %d\n", ct.id_product, ct.name_company, ct.name_product, ct.weight_product, ct.date_product);
         }
     }
-    if (!found) {
+    if (!found && !valid) {
         printf(" \n ------------------------------------------Record not found!------------------------------------------\n");
         printf("\nPress any key to go to main menu....");
         getch();
         list_menu();
-    } else {
+    }else if(!valid || found) {
         printf(" \n ------------------------------------------Record deleted---------------------------------------------\n");
     }
-    I:
     fclose(fp);
     fclose(fn);
     remove("D:\\Project-111\\text\\filecs.txt");
@@ -576,7 +585,7 @@ void read_info(){
 }
 
 void edit_info(){
-    int valid,ID,index,check;
+    int valid = 0,ID,index,check = 0;
     char c;
     FILE *fp, *fn;
     fp = fopen("D:\\Project-111\\text\\filecs.txt", "r+"); //open for read & write
@@ -591,8 +600,7 @@ void edit_info(){
         system("cls");
         printf("\n ---> Enter Product Code for edit : ");
         scanf("%d",&ID);
-        while (fscanf(fp, "%d %s %s %f %d\n", &ct.id_product, ct.name_company, ct.name_product, &ct.weight_product, &ct.date_product) != EOF)
-        {
+        while (fscanf(fp, "%d %s %s %f %d\n", &ct.id_product, ct.name_company, ct.name_product, &ct.weight_product, &ct.date_product) != EOF){
             if (ID == ct.id_product){
                 check = 1;
                 printf(" \n ------------------------------------------Record found!----------------------------------------------\n"); 
@@ -602,105 +610,124 @@ void edit_info(){
 				printf("\n- Price\t\t\t: %.2f",ct.weight_product);
 				printf("\n- Product Code\t\t: %d",ct.date_product);
                 printf("\n --------------------------------------------------------------- \n");
-                printf("\n\t\t\t******** New Record ********");
-            do { // company
+                printf("Press 'Y' to edit the existing record or any key to main menu...");
                 fflush(stdin);
-                printf("\n Enter Company name\t : ");
-                gets(ct.name_company);
-                ct.name_company[0] = toupper(ct.name_company[0]);
-
-                for (index = 0; index < strlen(ct.name_company); ++index) {
-                    if (isalpha(ct.name_company[index]))
-                        valid = 1; // is character 
-                    else {
-                        valid = 0; // is not character 
-                        break;
-                    }
-                }
-                if (!valid) {
-                    printf("\n\t -------------> Name contains invalid characters. Please enter again.");
-                    getch();
-                }
-            } while (!valid);
-
-            do { // Product detail
-                char name_product[20];
-                fflush(stdin);
-                printf("\nEnter Product name\t : ");
-                gets(ct.name_product);
-                ct.name_product[0] = toupper(ct.name_product[0]);
-
-                for (index = 0; index < strlen(ct.name_product); ++index) {
-                    if (isalpha(ct.name_product[index]))
-                        valid = 1; // is character  
-                    else {
-                        valid = 0; // is not character 
-                        break;
-                    }
-                }
-                if (!valid) {
-                    printf("\n\t -------------> Name contains invalid characters. Please enter again.");
-                    getch();
-                }
-            } while (!valid);
-                    
-            do {//Add weight of product
-                fflush(stdin);
-                printf("\nEnter Weight of Product(kg.)\t : ");
-                fgets(ct.weight_str, sizeof(ct.weight_str), stdin);
-                size_t len = strlen(ct.weight_str);
-                if (ct.weight_str[len - 1] == '\n') {
-                    ct.weight_str[len - 1] = '\0';
-                }valid = 1;
-                for (size_t index = 0; index < strlen(ct.weight_str); ++index) {
-                    if (!isdigit(ct.weight_str[index]) && ct.weight_str[index] != '.'){
-                        valid = 0; // is not character --> digits
-                        break;
-                    }
-                }
-                if (valid) {
-                    ct.weight_product = atof(ct.weight_str);
-                    break;
-                }else{
-                    printf("\n\t -------------> Name contains invalid characters. Please enter again.");
-                    getch();
-                }
-            } while (valid);
-                    
-            do { //Add date of rental   
-                fflush(stdin);
-                printf("\nEnter the number of days to rent\t : ");
-                if (scanf("%d",&ct.date_product) > 0){
+                scanf("%c",&c);
+                if(c == 'Y' || c == 'y'){
                     valid = 1;
+                    break;
                 }else{
                     valid = 0;
                     break;
                 }
-                if (!valid){
-                    printf("\n\t -------------> Name contains invalid characters. Please enter again.");
-                    getch(); 
-                }
-            } while (!valid);//end add
-                printf("Press 'Y' to edit the existing record or any key to cancel...");
-                c = getch();
-                if(c == 'y' || c == 'Y'){
-                    fprintf(fn,"%d %s %s %.2f %d\n", ct.id_product, ct.name_company, ct.name_product, ct.weight_product, ct.date_product);
+            }
+        }if (!check){
+            printf("\n\n --------------> THIS PRODUCT DOESN'T EXIST!!!!\n");
+            printf("\n\nPress any key to go to main menu....");
+        }else{
+            if (valid){
+                printf("\n\t\t\t******** New Record ********");
+                do { // company
                     fflush(stdin);
-                    printf("\n\n\t\t\tYOUR RECORD IS SUCCESSFULLY EDITED!!!");
+                    printf("\n Enter Company name\t : ");
+                    gets(ct.name_company);
+                    ct.name_company[0] = toupper(ct.name_company[0]);
+
+                    for (index = 0; index < strlen(ct.name_company); ++index) {
+                        if (isalpha(ct.name_company[index]))
+                            valid = 1; // is character 
+                        else {
+                            valid = 0; // is not character 
+                            break;
+                        }
+                    }
+                    if (!valid) {
+                        printf("\n\t -------------> Name contains invalid characters. Please enter again.");
+                        getch();
+                    }
+                } while (!valid);
+
+                do { // Product detail
+                    char name_product[20];
+                    fflush(stdin);
+                    printf("\nEnter Product name\t : ");
+                    gets(ct.name_product);
+                    ct.name_product[0] = toupper(ct.name_product[0]);
+
+                    for (index = 0; index < strlen(ct.name_product); ++index) {
+                        if (isalpha(ct.name_product[index]))
+                            valid = 1; // is character  
+                        else {
+                            valid = 0; // is not character 
+                            break;
+                        }
+                    }
+                    if (!valid) {
+                        printf("\n\t -------------> Name contains invalid characters. Please enter again.");
+                        getch();
+                    }
+                } while (!valid);
+                    
+                do {//Add weight of product
+                    fflush(stdin);
+                    printf("\nEnter Weight of Product(kg.)\t : ");
+                    fgets(ct.weight_str, sizeof(ct.weight_str), stdin);
+                    size_t len = strlen(ct.weight_str);
+                    if (ct.weight_str[len - 1] == '\n') {
+                        ct.weight_str[len - 1] = '\0';
+                    }valid = 1;
+                    for (size_t index = 0; index < strlen(ct.weight_str); ++index) {
+                        if (!isdigit(ct.weight_str[index]) && ct.weight_str[index] != '.'){
+                            valid = 0; // is not character --> digits
+                            break;
+                        }
+                    }
+                    if (valid) {
+                        ct.weight_product = atof(ct.weight_str);
+                        break;
+                    }else{
+                        printf("\n\t -------------> Name contains invalid characters. Please enter again.");
+                        getch();
+                    }
+                } while (valid);
+                    
+                do { //Add date of rental   
+                    fflush(stdin);
+                    printf("\nEnter the number of days to rent\t : ");
+                    if (scanf("%d",&ct.date_product) > 0){
+                        valid = 1;
+                    }else{
+                        valid = 0;
+                        break;
+                    }
+                    if (!valid){
+                        printf("\n\t -------------> Name contains invalid characters. Please enter again.");
+                        getch(); 
+                    }
+                } while (!valid);//end add
+                fprintf(fn, "%d %s %s %.2f %d\n", ct.id_product, ct.name_company, ct.name_product, ct.weight_product, ct.date_product);
+                printf("\n\n --------------> YOUR RECORD IS SUCCESSFULLY EDITED!!!\n");
+                printf("\n\nPress any key to go to main menu....");
+                rewind(fp);
+                while (fscanf(fp, "%d %s %s %f %d\n", &ct.id_product, ct.name_company, ct.name_product, &ct.weight_product, &ct.date_product) != EOF) {
+                    if (ID != ct.id_product) {
+                        fprintf(fn, "%d %s %s %.2f %d\n", ct.id_product, ct.name_company, ct.name_product, ct.weight_product, ct.date_product);
+                    }
                 }
             }else{
-                fprintf(fn,"%d %s %s %.2f %d\n", ct.id_product, ct.name_company, ct.name_product, ct.weight_product, ct.date_product);
-                fflush(stdin);
+                printf("\n\n --------------> EDIT CANCELED!\n");
+                printf("\n\nPress any key to go to main menu....");
             }
-        }
-        if (!check){
-            printf("\n\nTHIS PRODUCT DOESN'T EXIST!!!!");
         }
         fclose(fn);
         fclose(fp);
-        remove("D:\\Project-111\\text\\filecs.txt");
-        rename("D:\\Project-111\\text\\file_edit_detail.txt","D:\\Project-111\\text\\filecs.txt");
+        if (valid) {
+            remove("D:\\Project-111\\text\\filecs.txt");
+            rename("D:\\Project-111\\text\\file_edit_detail.txt", "D:\\Project-111\\text\\filecs.txt");
+        } else {
+            remove("D:\\Project-111\\text\\file_edit_detail.txt"); // ลบไฟล์ที่ไม่ได้ใช้งาน
+        }
         getch();
     }
     list_menu();
-}//end func edit_info 
+}
